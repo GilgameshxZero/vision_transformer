@@ -22,9 +22,11 @@ import tensorflow_datasets as tfds
 import sys
 if sys.platform != 'darwin':
   # A workaround to avoid crash because tfds may open to many files.
-  import resource
-  low, high = resource.getrlimit(resource.RLIMIT_NOFILE)
-  resource.setrlimit(resource.RLIMIT_NOFILE, (high, high))
+  # Doesn't exist in Windows.
+  # import resource
+  # low, high = resource.getrlimit(resource.RLIMIT_NOFILE)
+  # resource.setrlimit(resource.RLIMIT_NOFILE, (high, high))
+  pass
 
 # Adjust depending on the available RAM.
 MAX_IN_MEMORY = 200_000
@@ -33,8 +35,9 @@ DATASET_PRESETS = {
     'cifar10': {
         'train': 'train[:98%]',
         'test': 'test',
-        'resize': 512,
-        'crop': 384,
+        # Turning this down for memory purposes.
+        'resize': 32,
+        'crop': 32,
         'total_steps': 10_000,
     },
     'cifar100': {
